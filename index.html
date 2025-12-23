@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Profile Website</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:linear-gradient(45deg,#f58529,#dd2a7b,#8134af,#515bd4);
+}
+
+/* COMMON */
+button{
+    background:#3897f0;
+    color:white;
+    border:none;
+    padding:10px;
+    border-radius:6px;
+    cursor:pointer;
+}
+button:hover{opacity:.9}
+
+/* LOGIN */
+#loginPage{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.login-box{
+    background:white;
+    width:330px;
+    padding:25px;
+    border-radius:10px;
+    text-align:center;
+}
+.login-box input{
+    width:100%;
+    padding:10px;
+    margin-top:8px;
+}
+
+/* DASHBOARD */
+#dashboard,#projectsPage{
+    display:none;
+    padding:20px;
+}
+.header{
+    background:linear-gradient(45deg,#f58529,#dd2a7b,#8134af);
+    color:white;
+    padding:15px;
+    border-radius:12px;
+    display:flex;
+    justify-content:space-between;
+}
+.profile{
+    background:white;
+    margin-top:20px;
+    padding:25px;
+    border-radius:15px;
+}
+.avatar{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:linear-gradient(45deg,#f58529,#dd2a7b,#8134af);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:32px;
+}
+
+/* CARDS */
+.card,.project{
+    background:white;
+    margin-top:20px;
+    padding:20px;
+    border-radius:15px;
+}
+.project{
+    cursor:pointer;
+}
+.back{
+    background:white;
+    color:#dd2a7b;
+    margin-bottom:15px;
+}
+
+/* CALCULATOR */
+.calc input{
+    width:100%;
+    height:40px;
+    text-align:right;
+}
+.calc button{
+    width:22%;
+    margin:3px;
+}
+
+/* TODO */
+.todo input{
+    width:70%;
+    padding:8px;
+}
+.todo ul{
+    list-style:none;
+    padding:0;
+}
+.todo li{
+    background:#eee;
+    padding:8px;
+    margin-top:5px;
+    display:flex;
+    justify-content:space-between;
+}
+
+/* COLOR */
+.colorBox{
+    height:120px;
+    border-radius:10px;
+    margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage">
+<div class="login-box">
+<h2>Login</h2>
+<input id="loginUser" placeholder="Username">
+<input id="loginPass" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<p>No account? <span onclick="signup()" style="color:#3897f0;cursor:pointer">Sign In</span></p>
+<p id="msg"></p>
+</div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+<div class="header">
+<h3 id="welcome"></h3>
+<button onclick="logout()">Logout</button>
+</div>
+
+<div class="profile">
+<div class="avatar" id="avatar"></div>
+<h2 id="name"></h2>
+<p>Frontend Web Developer</p>
+</div>
+
+<div class="card" onclick="openProjects()">
+<h3>📂 My Projects</h3>
+<p>Click to see my working projects</p>
+</div>
+</div>
+
+<!-- PROJECTS -->
+<div id="projectsPage">
+<button class="back" onclick="back()">⬅ Back</button>
+
+<!-- Calculator -->
+<div class="project">
+<h3>🧮 Calculator App</h3>
+<div class="calc">
+<input id="calcRes" readonly>
+<br>
+<button onclick="addCalc('7')">7</button>
+<button onclick="addCalc('8')">8</button>
+<button onclick="addCalc('9')">9</button>
+<button onclick="addCalc('+')">+</button>
+<br>
+<button onclick="addCalc('4')">4</button>
+<button onclick="addCalc('5')">5</button>
+<button onclick="addCalc('6')">6</button>
+<button onclick="addCalc('-')">-</button>
+<br>
+<button onclick="addCalc('1')">1</button>
+<button onclick="addCalc('2')">2</button>
+<button onclick="addCalc('3')">3</button>
+<button onclick="addCalc('*')">*</button>
+<br>
+<button onclick="clearCalc()">C</button>
+<button onclick="addCalc('0')">0</button>
+<button onclick="calc()">=</button>
+<button onclick="addCalc('/')">/</button>
+</div>
+</div>
+
+<!-- Todo -->
+<div class="project todo">
+<h3>✅ To-Do List App</h3>
+<input id="todoInput" placeholder="New task">
+<button onclick="addTodo()">Add</button>
+<ul id="todoList"></ul>
+</div>
+
+<!-- Color -->
+<div class="project">
+<h3>🎨 Color Changer App</h3>
+<button onclick="changeColor()">Change Color</button>
+<div class="colorBox" id="colorBox"></div>
+</div>
+</div>
+
+<script>
+let user="",pass="";
+
+/* LOGIN */
+function signup(){
+    if(loginUser.value && loginPass.value){
+        user=loginUser.value;
+        pass=loginPass.value;
+        msg.innerText="Account created! Login now.";
+    }
+}
+function login(){
+    if(loginUser.value===user && loginPass.value===pass){
+        loginPage.style.display="none";
+        dashboard.style.display="block";
+        welcome.innerText="Welcome "+user;
+        name.innerText=user;
+        avatar.innerText=user[0].toUpperCase();
+    }else{
+        msg.innerText="Invalid login";
+    }
+}
+function logout(){location.reload()}
+
+/* NAV */
+function openProjects(){
+    dashboard.style.display="none";
+    projectsPage.style.display="block";
+}
+function back(){
+    projectsPage.style.display="none";
+    dashboard.style.display="block";
+}
+
+/* CALC */
+function addCalc(v){calcRes.value+=v}
+function clearCalc(){calcRes.value=""}
+function calc(){calcRes.value=eval(calcRes.value)}
+
+/* TODO */
+function addTodo(){
+    if(todoInput.value){
+        let li=document.createElement("li");
+        li.innerHTML=todoInput.value+" <button onclick='this.parentElement.remove()'>X</button>";
+        todoList.appendChild(li);
+        todoInput.value="";
+    }
+}
+
+/* COLOR */
+function changeColor(){
+    let colors=["#f58529","#dd2a7b","#8134af","#515bd4"];
+    colorBox.style.background=colors[Math.floor(Math.random()*colors.length)];
+}
+</script>
+
+</body>
+</html>
